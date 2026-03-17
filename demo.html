@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo</title>
+    <style>
+        html,
+        body,
+        canvas {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            background: black;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glcanvas" tabindex="0"></canvas>
+    <script>
+        // Ensure any startup focus inside the iframe never scrolls the parent page.
+        const nativeFocus = HTMLElement.prototype.focus;
+        HTMLElement.prototype.focus = function(opts) {
+            nativeFocus.call(this, opts ? { ...opts, preventScroll: true } : { preventScroll: true });
+        };
+    </script>
+    <script src="ply_bundle.js"></script>
+    <script>
+        load("app.wasm");
+    </script>
+</body>
+</html>

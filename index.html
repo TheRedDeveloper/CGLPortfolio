@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games Programming Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Geist+Mono:wght@400;500&family=Fira+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0b0b0b;
+    --surface:  #131313;
+    --surface2: #1a1a1a;
+    --border:   #272727;
+    --red:      #d42222;
+    --red2:     #b01c1c;
+    --text:     #e6e2dc;
+    --mid:      #9e9890;
+    --dim:      #5e5a55;
+    --sans:     'Fira Sans', sans-serif;
+    --display:  'Calistoga', sans-serif;
+    --mono:     'Geist Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ─────────────────────────────────── */
+  .hero {
+    padding: 72px 52px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+
+  .hero-text h1 {
+    font-family: var(--display);
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.01em;
+  }
+  .hero-text h1 span { color: var(--red); }
+
+  .hero-text p {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 20px;
+  }
+
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--mid);
+    text-decoration: none;
+    border-radius: 100px;
+    transition: border-color 0.15s, color 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .hero-pill:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── SECTIONS ─────────────────────────────── */
+  .section {
+    padding: 72px 52px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+  .section-num {
+    font-family: var(--display);
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 0.06em;
+  }
+  .section-title {
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+
+  /* ── SHARED ATOMS ─────────────────────────── */
+  .cap {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+    margin-top: 7px;
+    text-align: right;
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 2px;
+    color: var(--red);
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    padding: 10px 20px;
+    border: 1px solid var(--red);
+    color: var(--red);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    margin-top: 24px;
+  }
+  .btn:hover { background: var(--red); color: #fff; }
+
+  /* Shared body-text style used across all sections */
+  .prose { font-size: 15px; color: var(--mid); line-height: 1.75; }
+  .prose + .prose { margin-top: 12px; }
+  .prose strong { color: var(--text); font-weight: 600; }
+
+  /* ── PLY ENGINE ───────────────────────────── */
+  .ply-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 6px 14px;
+    margin-bottom: 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mid);
+  }
+  .ply-badge .star-count { color: var(--red); font-size: 15px; font-weight: 500; }
+
+  .ply-intro { font-size: 15px; color: var(--mid); line-height: 1.7; margin-bottom: 24px; }
+
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .feat {
+    padding: 13px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--red);
+  }
+  .feat strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .feat span { font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+  /* ── STRATUM ──────────────────────────────── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 44px;
+  }
+  .stat-cell { background: var(--surface); padding: 20px 18px; }
+  .stat-val { font-family: var(--display); font-size: 28px; color: var(--red); line-height: 1; margin-bottom: 5px; }
+  .stat-lbl { font-family: var(--mono); font-size: 9px; color: var(--dim); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.5; }
+
+  .tabs { display: flex; border: 1px solid var(--border); width: fit-content; margin-bottom: 28px; }
+  .tab {
+    padding: 8px 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--dim);
+    background: var(--surface);
+    border: none;
+    transition: background 0.12s, color 0.12s;
+  }
+  .tab.active { background: var(--red); color: #fff; }
+
+  .loop { display: none; }
+  .loop.active { display: block; }
+
+  .step-list { list-style: none; }
+  .step { display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .step-n { font-family: var(--mono); font-size: 10px; color: var(--red); width: 22px; flex-shrink: 0; margin-top: 3px; }
+  .step-body { font-size: 13px; color: var(--mid); line-height: 1.65; }
+  .step-body strong { color: var(--text); font-weight: 600; }
+
+  .sub-steps { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .sub-step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: var(--mid);
+    padding-left: 4px;
+  }
+  .sub-step::before {
+    content: attr(data-letter);
+    color: var(--red);
+    font-family: var(--mono);
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    width: 14px;
+  }
+
+  .diagram-card { background: var(--surface); border: 1px solid var(--border); padding: 18px; }
+  .diagram-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ep-list { list-style: none; }
+  .ep { display: flex; align-items: flex-start; gap: 9px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .ep:last-child { border-bottom: none; }
+  .method {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: 0.03em;
+  }
+  .ws   { background: #1a3a2a; color: #5ecf8a; border: 1px solid #2a5a3a; }
+  .get  { background: #1a2a3a; color: #5eabcf; border: 1px solid #2a3a5a; }
+  .post { background: #2a2a1a; color: #cfbe5e; border: 1px solid #4a4a2a; }
+  .ep-path { font-family: var(--mono); font-size: 11px; color: var(--text); display: block; margin-bottom: 2px; }
+  .ep-desc { font-size: 11px; color: var(--dim); line-height: 1.4; }
+  .ep-more { font-family: var(--mono); font-size: 11px; color: var(--dim); padding: 10px 0 4px; }
+
+  /* ── ed25519fast ──────────────────────────── */
+  .perf-intro { font-size: 15px; color: var(--mid); line-height: 1.75; margin-bottom: 24px; }
+
+  /* ── ACCESSIBILITY ────────────────────────── */
+  .a11y-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .a11y-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .auto-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    background: var(--red);
+    color: #fff;
+    padding: 3px 7px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  /* ── LEADERSHIP ───────────────────────────── */
+  .kv { border: 1px solid var(--border); margin-top: 28px; }
+  .kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    gap: 16px;
+  }
+  .kv-row:last-child { border-bottom: none; }
+  .kv-key { color: var(--mid); }
+  .kv-val { font-family: var(--mono); font-size: 10px; color: var(--red); text-align: right; flex-shrink: 0; }
+
+  .ldr-video {
+    width: 100%;
+    aspect-ratio: 43/27;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .ldr-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ── PLAY ─────────────────────────────────── */
+  .iframe-chrome { border: 1px solid var(--border); overflow: hidden; }
+  .iframe-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot.r { background: #e05555; }
+  .dot.y { background: #e0c055; }
+  .dot.g { background: #55cc77; }
+  .iframe-body { width: 100%; aspect-ratio: 16/9; background: var(--surface2); }
+  .iframe-body iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  .rules { background: var(--surface); border: 1px solid var(--border); padding: 18px; }
+  .rules-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rule {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+  }
+  .rule:last-child { border-bottom: none; }
+  .rule-bullet { color: var(--red); flex-shrink: 0; font-family: var(--mono); font-size: 10px; margin-top: 2px; }
+
+  /* ── FOOTER ───────────────────────────────── */
+  .footer-outer { border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
+  footer { padding: 36px 52px; display: flex; justify-content: space-between; align-items: center; }
+  .f-name { font-family: var(--display); font-size: 20px; color: var(--text); }
+  .f-sub { font-family: var(--mono); font-size: 9px; color: var(--dim); margin-top: 3px; letter-spacing: 0.06em; }
+  .f-links { display: flex; gap: 20px; }
+  .f-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    transition: color 0.15s;
+  }
+  .f-links a:hover { color: var(--red); }
+
+  /* ── ANIMATIONS ───────────────────────────── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .hero { animation: fadeUp 1s ease both 0.05s; }
+
+  /* ── RESPONSIVE ───────────────────────────── */
+  @media (max-width: 860px) {
+    .hero, .section { padding-left: 24px; padding-right: 24px; }
+    .hero { flex-direction: column; gap: 24px; }
+    .two-col { grid-template-columns: 1fr; gap: 36px; }
+    .feat-grid { grid-template-columns: 1fr 1fr; }
+    .stat-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .f-links { justify-content: center; }
+  }
+
+  @media (max-width: 540px) {
+    .feat-grid { grid-template-columns: 1fr; }
+  }
+
+  img { width: 100%; }
+
+  .mute-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--dim);
+    line-height: 0;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .mute-btn:hover { color: var(--mid); }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ────────────────────────────────────────── -->
+<div class="hero">
+  <div class="profile-pic">
+    <img src="profile.png" alt="RedDev">
+  </div>
+  <div class="hero-text">
+    <h1>Hi, I'm <span>RedDev.</span></h1>
+    <p>I'm a programmer from Germany who makes games, engines and infrastructure. I like working close to the metal and shipping things that actually run.</p>
+    <div class="hero-pills">
+      <a href="#ply" class="hero-pill">Ply Engine</a>
+      <a href="#stratum" class="hero-pill">Stratum</a>
+      <a href="#citrus" class="hero-pill">Citrus</a>
+      <a href="#ed25519fast" class="hero-pill">ed25519fast</a>
+      <a href="#accessibility" class="hero-pill">Accessibility</a>
+      <a href="#leadership" class="hero-pill">Games Talente</a>
+      <a href="#play" class="hero-pill">Play</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── PLY ENGINE ────────────────────────────────── -->
+<section class="section" id="ply">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Ply Engine</h2>
+  </div>
+
+  <div class="ply-badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="color:var(--red)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <span class="star-count">200+</span>
+    <span>GitHub stars, released this month</span>
+  </div>
+
+  <p class="ply-intro">Ply is an engine written in pure Rust. It compiles to 6+ platforms from a single codebase with no platform-specific code required.</p>
+
+  <div class="feat-grid">
+    <div class="feat">
+      <strong>Dead Simple API</strong>
+      <span>Builder pattern with closure-based children, minimal boilerplate.</span>
+    </div>
+    <div class="feat">
+      <strong>Cross-Platform</strong>
+      <span>Web, desktop, Android, iOS and more. One codebase, no platform-specific code.</span>
+    </div>
+    <div class="feat">
+      <strong>Accessibility</strong>
+      <span>AccessKit integration and JS bridge. Screen reader and keyboard support built in.</span>
+    </div>
+    <div class="feat">
+      <strong>GPU Shaders</strong>
+      <span>GLSL shaders, rotation and built-in effects via hardware acceleration.</span>
+    </div>
+    <div class="feat">
+      <strong>Layout Engine</strong>
+      <span>Flexbox-like layout: padding, gaps, grow, fit, scroll, floating...</span>
+    </div>
+    <div class="feat">
+      <strong>Text</strong>
+      <span>Selection, undo/redo, multiline, styled text, virtual keyboards...</span>
+    </div>
+    <div class="feat">
+      <strong>Debug Inspector</strong>
+      <span>Browser DevTools-like view built directly into the engine.</span>
+    </div>
+    <div class="feat">
+      <strong>Vector Graphics</strong>
+      <span>Custom TVG renderer with multi-step GPU caching.</span>
+    </div>
+    <div class="feat">
+      <strong>Interactive Docs</strong>
+      <span>Live, editable code examples in the browser and custom interpreter.</span>
+    </div>
+  </div>
+  <a href="https://plyx.iz.rs" target="_blank" rel="noopener noreferrer" class="btn">Website</a>
+</section>
+
+<!-- ── STRATUM ─────────────────────────────────────── -->
+<section class="section" id="stratum">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Stratum</h2>
+  </div>
+
+  <p class="prose" style="margin-bottom:40px;max-width:700px;">A two-player abstract strategy game built on Ply. Players compete to form a connected path across opposite edges of the board using Roads, Walls, Towers and Charms.</p>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="stat-val">6</div>
+      <div class="stat-lbl">Auth providers with account merging</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val">∞</div>
+      <div class="stat-lbl">Horizontal scale (failover across nodes)</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val">Full</div>
+      <div class="stat-lbl">Moderation stack</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="tabs">
+        <button class="tab active" onclick="showLoop('pvp', this)">PvP</button>
+        <button class="tab" onclick="showLoop('pve', this)">PvE</button>
+      </div>
+
+      <div id="loop-pvp" class="loop active">
+        <ul class="step-list">
+          <li class="step">
+            <span class="step-n">0.</span>
+            <span class="step-body">A table of <strong>5 Charms</strong> is shown. A 3-second countdown begins, after which both players pick up to 2. The player who takes the last Charm goes first.</span>
+          </li>
+          <li class="step">
+            <span class="step-n">1.</span>
+            <div class="step-body">
+              The active player does one of:
+              <ul class="sub-steps">
+                <li class="sub-step" data-letter="a."><strong>Place</strong> a Road, Wall or their single Tower on any empty space.</li>
+                <li class="sub-step" data-letter="b."><strong>Move</strong> a single piece to any adjacent tile with &lt;5 stones, or move a stack in a straight line, dropping pieces one by one. The Tower is the only piece that can move onto a Wall, which flattens it.</li>
+                <li class="sub-step" data-letter="c."><strong>Use</strong> one of their Charms.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">2.</span>
+            <span class="step-body">Gems are tallied. If an orthogonally connected path of uncovered Roads and Towers links any two opposite board edges, the active player wins. If the board is full with no path, most Gems wins. Turns then alternate.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div id="loop-pve" class="loop">
+        <ul class="step-list">
+          <li class="step">
+            <span class="step-n">-1.</span>
+            <span class="step-body">The <strong>Shop</strong> sells Charms for Gems earned across matches.</span>
+          </li>
+          <li class="step">
+            <span class="step-n">0.</span>
+            <span class="step-body">Before starting, the player picks <strong>2 Charms</strong> from their collection.</span>
+          </li>
+          <li class="step">
+            <span class="step-n">1.</span>
+            <div class="step-body">
+              The active player does one of:
+              <ul class="sub-steps">
+                <li class="sub-step" data-letter="a."><strong>Place</strong> a Road, Wall or their single Tower on any empty space.</li>
+                <li class="sub-step" data-letter="b."><strong>Move</strong> a single piece to any adjacent tile with &lt;5 stones, or move a stack in a straight line, dropping pieces one by one. The Tower is the only piece that can move onto a Wall, which flattens it.</li>
+                <li class="sub-step" data-letter="c."><strong>Use</strong> one of their Charms.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">2.</span>
+            <span class="step-body">Gems are tallied. If an orthogonally connected path of uncovered Roads and Towers links any two opposite board edges, the active player wins. If the board is full with no path, most Gems wins. Turns then alternate.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="diagram-card">
+        <div class="diagram-title">// server API</div>
+        <ul class="ep-list">
+          <li class="ep">
+            <span class="method ws">WS</span>
+            <div><span class="ep-path">/matches/socket/{id}</span><span class="ep-desc">Real-time match with server-authoritative game state, move hashing and chat</span></div>
+          </li>
+          <li class="ep">
+            <span class="method ws">WS</span>
+            <div><span class="ep-path">/matches/matchmaking</span><span class="ep-desc">Queue socket; emits match_found with machine routing when a pair is found</span></div>
+          </li>
+          <li class="ep">
+            <span class="method get">GET</span>
+            <div><span class="ep-path">/matches/reallocate/{id}</span><span class="ep-desc">Migrates a live match to a new node when the original server goes down</span></div>
+          </li>
+          <li class="ep">
+            <span class="method post">POST</span>
+            <div><span class="ep-path">/auth/link</span><span class="ep-desc">Links a new identity or auto-merges accounts</span></div>
+          </li>
+          <li class="ep">
+            <span class="method post">POST</span>
+            <div><span class="ep-path">/progress/{slot_id}</span><span class="ep-desc">Cloud save with conflict resolution strategies: error, force or fork</span></div>
+          </li>
+          <li class="ep">
+            <span class="method get">GET</span>
+            <div><span class="ep-path">/rating/{player_id}</span><span class="ep-desc">Glicko-1 rating and deviation</span></div>
+          </li>
+        </ul>
+        <p class="ep-more">...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CITRUS ──────────────────────────────────────── -->
+<section class="section" id="citrus">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Citrus</h2>
+  </div>
+
+  <p class="perf-intro">Citrus is a scooter rental system where the scooter has no internet connection, only Bluetooth, which makes for some strict networking and cryptography constraints across three parties: server, phone and scooter.</p>
+  <img src="citrus.jpg" alt="Complex sequence diagram">
+</section>
+
+<!-- ── ed25519fast ────────────────────────────────── -->
+<section class="section" id="ed25519fast">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">ed25519fast</h2>
+  </div>
+
+  <p class="perf-intro">ed25519fast is my Ed25519 elliptic curve cryptography implementation written in Rust (CPU) and Slang (GPU). It is the fastest known secure implementation of digital signature cryptography and 3-30x faster in most cases.</p>
+  <img src="ed25519fast.png" alt="Graphs showing 3x to 30x performance vs fastest alternative">
+</section>
+
+<!-- ── ACCESSIBILITY ─────────────────────────────── -->
+<section class="section" id="accessibility">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Accessibility</h2>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="prose">I think games that exclude people with disabilities are a failure of imagination. Every app on Ply gets full screen reader support, across all 6+ platforms using the respective screen readers. Stratum inherits this without much extra work.</p>
+      <p class="prose">The game has been completed blind. I find it pathetic that other engines ship without accessibility support.</p>
+    </div>
+
+    <div>
+      <div class="a11y-video">
+        <video id="a11y-video" autoplay muted loop playsinline alt="Stratum being played blind on ChromeVox screen reader">
+          <source src="accessibility.webm" type="video/webm">
+        </video>
+      </div>
+      <p class="cap" style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">Stratum being played blind on ChromeVox screen reader<button class="mute-btn" onclick="toggleMute(this,'a11y-video')" title="Unmute" aria-label="Unmute video"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── LEADERSHIP ────────────────────────────────── -->
+<section class="section" id="leadership">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Games Talente</h2>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="prose">Games Talente is a competitive game development program run by the German games industry, with participants selected by a jury of industry professionals. I was selected for my AI-based strategy game and was the <strong>sole programmer, project manager and director</strong> on a team making an original game from scratch.</p>
+      <p class="prose">I wrote all the code, handled all asset integration and shipping, and led the team. We were the only group to finish and ship a complete game.</p>
+
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Role</span><span class="kv-val">Sole programmer, project manager, director</span></div>
+        <div class="kv-row"><span class="kv-key">Teams that shipped</span><span class="kv-val">1 / 10</span></div>
+        <div class="kv-row"><span class="kv-key">Disciplines coordinated</span><span class="kv-val">Art, design, code, sound</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="ldr-video">
+        <video id="ldr-video" autoplay muted loop playsinline alt="Gameplay compilation of submarine game">
+          <source src="gamestalente.webm" type="video/webm">
+        </video>
+      </div>
+      <p class="cap" style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">"Megalodon" gameplay<button class="mute-btn" onclick="toggleMute(this,'ldr-video')" title="Unmute" aria-label="Unmute video"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PLAY STRATUM ──────────────────────────────── -->
+<section class="section" id="play">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Play Stratum</h2>
+  </div>
+
+  <p class="prose" style="margin-bottom:24px;">This demo drops you straight into Level 3, against an early Purist with 40% imperfection.</p>
+
+  <div class="iframe-chrome" style="margin-bottom:24px;">
+    <div class="iframe-body">
+      <iframe id="play-demo" src="demo.html" title="Stratum" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rules-title">// what's happening</div>
+    <div class="rule"><span class="rule-bullet">▸</span><span>Each turn you place one piece, move one, or use a Charm.</span></div>
+    <div class="rule"><span class="rule-bullet">▸</span><span>First to connect two opposite edges of the board with an unbroken path of their Roads and Towers wins.</span></div>
+    <div class="rule"><span class="rule-bullet">▸</span><span>If the board fills with no path, the player with more Gems wins.</span></div>
+    <div class="rule"><span class="rule-bullet">▸</span><span>The Swap charm lets you exchange any two tiles on the board.</span></div>
+    <div class="rule"><span class="rule-bullet">▸</span><span>7 more charms are already balance-tested and implemented each allowing for unique strategies.</span></div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<div class="footer-outer">
+  <footer>
+    <div>
+      <div class="f-name">RedDev</div>
+      <div class="f-sub">game programming portfolio</div>
+    </div>
+    <div class="f-links">
+      <a href="https://plyx.iz.rs" target="_blank" rel="noopener noreferrer">Ply Engine</a>
+      <a href="https://github.com/TheRedDeveloper" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function showLoop(mode, btn) {
+    document.querySelectorAll('.loop').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('loop-' + mode).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleMute(btn, videoId) {
+    const video = document.getElementById(videoId);
+    video.muted = !video.muted;
+    const muted = video.muted;
+    btn.title = muted ? 'Unmute' : 'Mute';
+    btn.setAttribute('aria-label', muted ? 'Unmute video' : 'Mute video');
+    btn.innerHTML = muted
+      ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'
+      : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+  }
+</script>
+</body>
+</html>
