@@ -15,8 +15,9 @@
     --border:   #272727;
     --red:      #d42222;
     --red2:     #b01c1c;
-    --text:     #e6e2dc;
-    --mid:      #9e9890;
+    --text:     #ffffff;
+    --mid:      #d3cec7;
+    --semi:     #928e88;
     --dim:      #5e5a55;
     --sans:     'Fira Sans', sans-serif;
     --display:  'Calistoga', sans-serif;
@@ -189,7 +190,7 @@
     border-left: 2px solid var(--red);
   }
   .feat strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-  .feat span { font-size: 12px; color: var(--dim); line-height: 1.5; }
+  .feat span { font-size: 12px; color: var(--semi); line-height: 1.5; }
 
   /* ── STRATUM ──────────────────────────────── */
   .stat-row {
@@ -202,7 +203,7 @@
   }
   .stat-cell { background: var(--surface); padding: 20px 18px; }
   .stat-val { font-family: var(--display); font-size: 28px; color: var(--red); line-height: 1; margin-bottom: 5px; }
-  .stat-lbl { font-family: var(--mono); font-size: 9px; color: var(--dim); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.5; }
+  .stat-lbl { font-family: var(--mono); font-size: 10px; color: var(--mid); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.5; }
 
   .tabs { display: flex; border: 1px solid var(--border); width: fit-content; margin-bottom: 28px; }
   .tab {
@@ -274,13 +275,30 @@
   .get  { background: #1a2a3a; color: #5eabcf; border: 1px solid #2a3a5a; }
   .post { background: #2a2a1a; color: #cfbe5e; border: 1px solid #4a4a2a; }
   .ep-path { font-family: var(--mono); font-size: 11px; color: var(--text); display: block; margin-bottom: 2px; }
-  .ep-desc { font-size: 11px; color: var(--dim); line-height: 1.4; }
+  .ep-desc { font-size: 11px; color: var(--semi); line-height: 1.4; }
   .ep-more { font-family: var(--mono); font-size: 11px; color: var(--dim); padding: 10px 0 4px; }
 
   /* ── ed25519fast ──────────────────────────── */
   .perf-intro { font-size: 15px; color: var(--mid); line-height: 1.75; margin-bottom: 24px; }
 
   /* ── ACCESSIBILITY ────────────────────────── */
+  .a11y-stats {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 18px 0;
+  }
+  .a11y-stat {
+    flex: 1;
+    background: var(--surface);
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .a11y-n { font-family: var(--display); font-size: 18px; color: var(--red); line-height: 1; }
+  .a11y-desc { font-family: var(--mono); font-size: 9px; color: var(--mid); letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4; }
   .a11y-video {
     width: 100%;
     aspect-ratio: 16/9;
@@ -652,6 +670,11 @@
   <div class="two-col">
     <div>
       <p class="prose">I think games that exclude people with disabilities are a failure of imagination. Every app on Ply gets full screen reader support, across all 6+ platforms using the respective screen readers. Stratum inherits this without much extra work.</p>
+      <div class="a11y-stats">
+        <div class="a11y-stat"><span class="a11y-n">1 in 5</span><span class="a11y-desc">have dyslexia</span></div>
+        <div class="a11y-stat"><span class="a11y-n">1 in 20</span><span class="a11y-desc">have a severe vision disability</span></div>
+        <div class="a11y-stat"><span class="a11y-n">1 in 50</span><span class="a11y-desc">use a screen reader</span></div>
+      </div>
       <p class="prose">The game has been completed blind. I find it pathetic that other engines ship without accessibility support.</p>
     </div>
 
